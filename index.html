@@ -67,22 +67,22 @@
   </div>
 
   <script>
-    // Get name and id from URL parameters (optional)
+    // Read name and id from URL parameters
     const params = new URLSearchParams(window.location.search);
     const name = params.get("name") || "Unknown";
     const id = params.get("id") || "Default";
 
-    // Your Apps Script Web App URL (replace with your deployment URL)
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbx9_KPGAkOUqpHLXI0FW4nVF_T0_mBRU6Th4bPh_bXZB-lZ0Xihs5nk5Pdf80JuZQhK/exec";
+    // Your Apps Script redirect + logging URL
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbx9_KPGAkOUqpHLXI0FW4nVF_T0_mBRU6Th4bPh_bXZB-lZ0Xihs5nk5Pdf80JuZQhK/exec"; // <-- replace with your Apps Script URL
 
-    document.getElementById("joinBtn").addEventListener("click", function(e){
+    // Update button dynamically
+    const joinBtn = document.getElementById("joinBtn");
+    joinBtn.href = `${scriptUrl}?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`;
+
+    // Optional: open in new tab when clicked
+    joinBtn.addEventListener("click", function(e){
       e.preventDefault();
-
-      // Redirect to Apps Script, passing name and id
-      const redirectUrl = `${scriptUrl}?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`;
-
-      // Open in a new tab (mobile and desktop friendly)
-      window.open(redirectUrl, "_blank");
+      window.open(joinBtn.href, "_blank");
     });
   </script>
 
