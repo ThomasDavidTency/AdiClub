@@ -1,45 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Join adiClub</title>
-<style>
-body { margin:0; background:#000; color:#fff; font-family:Arial,sans-serif; text-align:center; padding:20px; }
-.logo { width:50%; max-width:220px; margin:40px auto; display:block; }
-h1 { font-size:36px; margin:20px 0; }
-p { font-size:18px; margin-bottom:30px; color:#ccc; }
-.btn { padding:15px 40px; background:#fff; color:#000; text-decoration:none; font-weight:bold; border-radius:6px; display:inline-block; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join adiClub</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 700px;
+      padding: 20px;
+    }
+    .logo {
+      width: 50%;
+      max-width: 220px;
+      margin-bottom: 30px;
+    }
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 18px;
+      line-height: 1.5;
+      color: #ccc;
+      margin-bottom: 30px;
+    }
+    .btn {
+      padding: 15px 40px;
+      font-size: 18px;
+      font-weight: bold;
+      background: #fff;
+      color: #000;
+      text-decoration: none;
+      border-radius: 6px;
+      display: inline-block;
+    }
+    .btn:hover { background: #ddd; }
+
+    @media(max-width:480px) {
+      h1 { font-size: 28px; }
+      p { font-size: 16px; }
+      .btn { padding: 12px 30px; font-size: 16px; }
+      .logo { width: 70%; }
+    }
+  </style>
 </head>
 <body>
 
-<img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/1/1c/Adidas-original.svg">
-<h1>UNLOCK MORE REWARDS</h1>
-<p>Earn adiClub points with every purchase and redeem them for member exclusives.</p>
-<a href="#" class="btn" id="joinBtn">JOIN FOR FREE</a>
+  <div class="container">
+    <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/1/1c/Adidas-original.svg" alt="Adidas Logo">
+    <h1>UNLOCK MORE REWARDS</h1>
+    <p>Earn adiClub points with every purchase and redeem them for member exclusives.</p>
 
-<script>
-// URL Parameters
-const params = new URLSearchParams(window.location.search);
-const name = params.get("name") || "Unknown";
-const id = params.get("id") || "Default";
-const destination = "https://www.adidas.co.nz/adiclub";
-const logUrl = "https://script.google.com/macros/s/AKfycbx9_KPGAkOUqpHLXI0FW4nVF_T0_mBRU6Th4bPh_bXZB-lZ0Xihs5nk5Pdf80JuZQhK/exec"; // replace with your Apps Script URL
+    <a href="#" class="btn" id="joinBtn">JOIN FOR FREE</a>
+  </div>
 
-document.getElementById("joinBtn").addEventListener("click", function(e){
-  e.preventDefault();
+  <script>
+    // Get name and id from URL parameters (optional)
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name") || "Unknown";
+    const id = params.get("id") || "Default";
 
-  // Open Adidas in new tab (mobile-friendly)
-  window.open(destination, "_blank");
+    // Your Apps Script Web App URL (replace with your deployment URL)
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbx9_KPGAkOUqpHLXI0FW4nVF_T0_mBRU6Th4bPh_bXZB-lZ0Xihs5nk5Pdf80JuZQhK/exec";
 
-  // Send log to Google Sheet
-  fetch(logUrl, {
-    method: "POST",
-    body: JSON.stringify({name: name, id: id}),
-    headers: {"Content-Type": "application/json"}
-  }).catch(err => console.log("Logging failed", err));
-});
-</script>
+    document.getElementById("joinBtn").addEventListener("click", function(e){
+      e.preventDefault();
+
+      // Redirect to Apps Script, passing name and id
+      const redirectUrl = `${scriptUrl}?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`;
+
+      // Open in a new tab (mobile and desktop friendly)
+      window.open(redirectUrl, "_blank");
+    });
+  </script>
 
 </body>
 </html>
