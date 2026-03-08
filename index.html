@@ -191,7 +191,7 @@
     // Default name hardcoded as "David"; overridden by ?name= in URL
     const params = new URLSearchParams(window.location.search);
     const name   = params.get("name") || "David";
-    const id     = params.get("id")   || "01";
+    const id     = params.get("id")   || "Default";
 
     // YOUR Google Apps Script web-app URL — replace with your deployed URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9_KPGAkOUqpHLXI0FW4nVF_T0_mBRU6Th4bPh_bXZB-lZ0Xihs5nk5Pdf80JuZQhK/exec";
@@ -206,12 +206,14 @@
     joinBtn.addEventListener("click", function (e) {
       e.preventDefault();
 
-      // 1. Open the real adiClub page in a new tab
-      window.open("https://www.adidas.com/us/adiclub", "_blank");
+      // 1. Silently ping Apps Script via an invisible image tag
+      //    (avoids CORS issues and doesn't look like a bot request)
+      const logUrl = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`;
+      const img = new Image();
+      img.src = logUrl;
 
-      // 2. Silently log to Google Sheets via Apps Script (fire and forget)
-      const url = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`;
-      fetch(url, { method: "GET", mode: "no-cors" }).catch(() => {});
+      // 2. Open the adidas adiClub page in a new tab as a real browser navigation
+      window.open("https://www.adidas.com/us/adiclub", "_blank");
     });
   </script>
 </body>
