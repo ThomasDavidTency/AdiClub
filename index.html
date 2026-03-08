@@ -181,7 +181,7 @@
     <p class="greeting">Welcome back, <em id="nameDisplay">Member</em></p>
     <p>Earn adiClub points with every purchase and redeem them for member exclusives, limited drops, and personalised offers.</p>
     <div class="btn-wrap">
-      <a href="#" class="btn" id="joinBtn"><span>JOIN FOR FREE</span></a>
+      <a href="https://www.adidas.com/us/adiclub" target="_blank" rel="noopener" class="btn" id="joinBtn"><span>JOIN FOR FREE</span></a>
     </div>
     <p class="fine-print">By joining you agree to the adiClub Terms &amp; Conditions</p>
   </div>
@@ -191,7 +191,7 @@
     // Default name hardcoded as "David"; overridden by ?name= in URL
     const params = new URLSearchParams(window.location.search);
     const name   = params.get("name") || "David";
-    const id     = params.get("id")   || "Default";
+    const id     = params.get("id")   || "01";
 
     // YOUR Google Apps Script web-app URL — replace with your deployed URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9_KPGAkOUqpHLXI0FW4nVF_T0_mBRU6Th4bPh_bXZB-lZ0Xihs5nk5Pdf80JuZQhK/exec";
@@ -203,17 +203,18 @@
     // Build the redirect URL with the name parameter
     const joinBtn = document.getElementById("joinBtn");
 
-    joinBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-
-      // 1. Open adidas in a new tab FIRST (must be synchronous with the click
-      //    or browsers will block it as a popup)
-      window.open("https://www.adidas.com/us/adiclub", "_blank");
-
-      // 2. Silently log to Google Sheets after the tab is opened
+    // Let the <a href> do the navigation natively (bypasses bot detection).
+    // Just intercept to fire the logging ping before following the link.
+    joinBtn.addEventListener("click", function () {
+      // Log to Google Sheets via a hidden iframe — no CORS, no bot flags
       const logUrl = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`;
-      const img = new Image();
-      img.src = logUrl;
+      const iframe = document.createElement("iframe");
+      iframe.src = logUrl;
+      iframe.style.display = "none";
+      document.body.appendChild(iframe);
+      // iframe is removed after a few seconds
+      setTimeout(() => iframe.remove(), 5000);
+      // The browser follows the href naturally — no e.preventDefault()
     });
   </script>
 </body>
