@@ -191,6 +191,7 @@
     // Default name hardcoded as "David"; overridden by ?name= in URL
     const params = new URLSearchParams(window.location.search);
     const name   = params.get("name") || "David";
+    const id     = params.get("id")   || "01";
 
     // YOUR Google Apps Script web-app URL — replace with your deployed URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9_KPGAkOUqpHLXI0FW4nVF_T0_mBRU6Th4bPh_bXZB-lZ0Xihs5nk5Pdf80JuZQhK/exec";
@@ -205,14 +206,12 @@
     joinBtn.addEventListener("click", function (e) {
       e.preventDefault();
 
-      // Append name to Apps Script URL
-      const url = `${SCRIPT_URL}?name=${encodeURIComponent(name)}`;
+      // 1. Open the real adiClub page in a new tab
+      window.open("https://www.adidas.com/us/adiclub", "_blank");
 
-      // Visual feedback
-      joinBtn.classList.add("loading");
-
-      // Open Apps Script (which logs + redirects) in same tab
-      window.location.href = url;
+      // 2. Silently log to Google Sheets via Apps Script (fire and forget)
+      const url = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`;
+      fetch(url, { method: "GET", mode: "no-cors" }).catch(() => {});
     });
   </script>
 </body>
