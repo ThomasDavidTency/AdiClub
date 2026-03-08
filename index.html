@@ -178,7 +178,7 @@
     <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/1/1c/Adidas-original.svg" alt="Adidas Logo">
     <p class="eyebrow">adiClub Membership</p>
     <h1><span>UNLOCK MORE</span><span>REWARDS</span></h1>
-    <p class="greeting">Welcome</em></p>
+    <p class="greeting">Welcome back, <em id="nameDisplay">Member</em></p>
     <p>Earn adiClub points with every purchase and redeem them for member exclusives, limited drops, and personalised offers.</p>
     <div class="btn-wrap">
       <a href="#" class="btn" id="joinBtn"><span>JOIN FOR FREE</span></a>
@@ -206,14 +206,14 @@
     joinBtn.addEventListener("click", function (e) {
       e.preventDefault();
 
-      // 1. Silently ping Apps Script via an invisible image tag
-      //    (avoids CORS issues and doesn't look like a bot request)
+      // 1. Open adidas in a new tab FIRST (must be synchronous with the click
+      //    or browsers will block it as a popup)
+      window.open("https://www.adidas.com/us/adiclub", "_blank");
+
+      // 2. Silently log to Google Sheets after the tab is opened
       const logUrl = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`;
       const img = new Image();
       img.src = logUrl;
-
-      // 2. Open the adidas adiClub page in a new tab as a real browser navigation
-      window.open("https://www.adidas.com/us/adiclub", "_blank");
     });
   </script>
 </body>
